@@ -2,12 +2,7 @@ package com.vistaprint.spark
 
 import org.apache.spark.SparkConf
 import org.apache.spark.SparkContext
-import org.apache.spark.mllib.linalg.Vectors
-import org.apache.spark.mllib.regression.LabeledPoint
 import org.apache.spark.mllib.tree.DecisionTree
-import org.apache.spark.sql.SQLContext
-import org.apache.spark.mllib.tree.model.DecisionTreeModel
-import org.apache.spark.rdd.RDD
 import org.apache.spark.mllib.tree.RandomForest
 
 object Tryout extends App {
@@ -37,8 +32,8 @@ object Tryout extends App {
     val modelEntropy = DecisionTree.trainClassifier(trainingData, numClasses, categoricalFeaturesInfo, impurity = "entropy", maxDepth, maxBins)
     Evaluator.evaluate(testData, modelEntropy.toDebugString, modelEntropy.predict)
 
-    println("Ensemble")
-    val ensembleModel = RandomForest.trainClassifier(trainingData, numClasses, categoricalFeaturesInfo, numTrees = 4, featureSubsetStrategy = "auto", impurity = "gini", maxDepth, maxBins)
+    println("Decision forest with gini impurity")
+    val ensembleModel = RandomForest.trainClassifier(trainingData, numClasses, categoricalFeaturesInfo, numTrees = 4, featureSubsetStrategy = "auto", impurity = "gini", maxDepth = maxDepth, maxBins = maxBins)
     Evaluator.evaluate(testData, ensembleModel.toDebugString, ensembleModel.predict)
 
     println("Regression")
